@@ -14,7 +14,7 @@
 ## 3. setmatrix - executes the solve() function on the passed square matrix, and returns it to the calling environment
 ## 4. getmatrix - returns the matrix m 
 
-## invoke x <- makeCacheMatrix(mydata)
+## invoke z <- makeCacheMatrix()
 makeCacheMatrix <- function(x = matrix()) {
 	m <- NULL ## m is defined as a local variable in the function
 
@@ -25,7 +25,7 @@ makeCacheMatrix <- function(x = matrix()) {
 	get <- function() x ## return the data
 	setmatrix <- function(solve) m <<- solve ## execute the solve function to invert the matriz, put in m
 	getmatrix <- function() m ## return the inverted matrix
-	list(set = set, get = get, setmatrix = setmatrix, getmatrix = getmatrix) ## return a list of the methods of x
+	list(set = set, get = get, setmatrix = setmatrix, getmatrix = getmatrix) ## return a list of the methods of z
 
 }
 
@@ -35,15 +35,19 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
 	## Return a matrix that is the inverse of 'x'
-	
-	m <- x$getmatrix()
+	z$set(x)
+	m <- z$getmatrix()
 	if (!is.null(m)) {
 		message("getting cached data")
-		####  return(m)
-	} else {
-	data <- x$get()
-	m <- solve(data)
-	x$setmatrix(m) }
-	m
+		 return(m)
+		} 
+		 {message("calculating inverse")
+		data <- z$get()
+		m <- solve(data)
+		z$setmatrix(m)
+	m <- z$getmatrix()	
+		m
+	}
+	
 
 }
