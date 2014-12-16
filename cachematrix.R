@@ -13,17 +13,18 @@
 ## 2. get - returns the data
 ## 3. setmatrix - executes the solve() function on the passed square matrix, and returns it to the calling environment
 ## 4. getmatrix - returns the matrix m 
-
+## These functions live in a child environment
 ## invoke z <- makeCacheMatrix()
 makeCacheMatrix <- function(x = matrix()) {
-	m <- NULL ## m is defined as a local variable in the function
-
+	##	m <- 55 ## m is defined as a local variable in the function
+	
 	set <- function(y) {
 		x <<- y ## pass the data matrix
 		m <<- NULL ## this sets the variable m in the calling environment. There is no inverted matrix yet.
+		message(c("set matrix x ", m))
 	}
 	get <- function() x ## return the data
-	setmatrix <- function(solve) m <<- solve ## execute the solve function to invert the matriz, put in m
+	setmatrix <- function(x) m <<- solve(x) ## execute the solve function to invert the matriz, put in m
 	getmatrix <- function() m ## return the inverted matrix
 	list(set = set, get = get, setmatrix = setmatrix, getmatrix = getmatrix) ## return a list of the methods of z
 
@@ -35,19 +36,22 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
 	## Return a matrix that is the inverse of 'x'
-	z$set(x)
-	m <- z$getmatrix()
-	if (!is.null(m)) {
-		message("getting cached data")
-		 return(m)
-		} 
-		 {message("calculating inverse")
-		data <- z$get()
-		m <- solve(data)
-		z$setmatrix(m)
-	m <- z$getmatrix()	
-		m
-	}
-	
+	browser()
 
+	## z$set(x)
+	r <- z$getmatrix()
+	message(c("r ", is.null(r)))
+	if (!is.null(r)) {
+		message("getting cached data")
+		return(r)
+	} else {
+
+		message("calculating inverse")
+		data <- z$get()
+		message("got data")
+		##		m <- solve(data)
+		z$setmatrix(data)
+		q <- z$getmatrix()
+		q
+	}
 }
